@@ -51,23 +51,24 @@ for(var i=0;i<coupons.length;i++){
 
 
 /* подписаться на клики: addEventListener */
-var toCart = document.querySelectorAll('.catalog_cart__btn');
+
+
+var toCart = document.querySelectorAll('.catalog__item');
 for (var i=0; i<toCart.length; i++){
-    toCart[i].addEventListener('click',function(e){
+    toCart[i].addEventListener('click',(function(i){
+        return function(e){
         e.preventDefault();
-        var element = e.target.parentNode.parentNode.parentNode.parentNode;
-        var price = Number(element.dataset.price);
-        element = e.target.parentNode.parentNode.previousElementSibling;
-        var title = element.innerText;
-        console.log(price,title);
-        addToCart(title,price);
-    })
+        if (!toCart[i].classList.contains("catalog_cart--disabled")){
+            var price = Number(toCart[i].dataset.price);
+            var element=toCart[i].querySelector(".catalog_cart__title")
+            var title = element.innerText;
+            addToCart(title,price);
+        }
+    }
+    })(i))
 }
-//console.log(el);
-    /* создать объект */
-    /* создать элемент. document.createElement('div'), .innerHTML */
-    /* appendChild к списку */
-    /* обновить тотал */
+
+
 function addToCart(title, price) {
     var el = document.createElement('div');
     el.classList.add('catalog_basket__line');
@@ -105,6 +106,34 @@ function removeFromCart(e, context) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // function validateName(){
 //    return document.forms.order.elements.name.value.match(/[a-zа-я]+\s[a-zа-я]+/i)
 // }
@@ -118,21 +147,21 @@ function removeFromCart(e, context) {
 // function validateEmail(){
 //   return  document.forms.order.elements.email.value.match(/.+@.+\..+/)
 // }
-document.forms.order.elements.name.addEventListener("input",function(e) {
-   if(validate(this, /[a-zа-я]+\s?[a-zа-я]+/i)===null){
-    this.style.borderColor="red";
-    this.style.color="red";
-   }else{
-    this.style.borderColor="black";
-    this.style.color="black";
-    }
-})//и так по каждой форме
+// document.forms.order.elements.name.addEventListener("input",function(e) {
+//    if(validate(this, /[a-zа-я]+\s?[a-zа-я]+/i)===null){
+//     this.style.borderColor="red";
+//     this.style.color="red";
+//    }else{
+//     this.style.borderColor="black";
+//     this.style.color="black";
+//     }
+// })//и так по каждой форме
 
 
 
-function validate(input,regular){
-return input.value.match(regular)
-}
+// function validate(input,regular){
+// return input.value.match(regular)
+// }
 
 // function validateAll(){
 //     validate("name",/[a-zа-я]+\s?[a-zа-я]+/i);
@@ -144,20 +173,20 @@ return input.value.match(regular)
 // }
 
 
-function validateCheckBox(){
-    var flag=false;
-    var checkBoxes=document.forms.order.elements.delivery;
-    for (var i=0; i<chechBoxes.length;i++){
-         if (checkBoxes[i].checked){
-            flag=true;
-        }
-    }
-return flag;
-}
+// function validateCheckBox(){
+//     var flag=false;
+//     var checkBoxes=document.forms.order.elements.delivery;
+//     for (var i=0; i<chechBoxes.length;i++){
+//          if (checkBoxes[i].checked){
+//             flag=true;
+//         }
+//     }
+// return flag;
+//}
 
 
+// document.forms.order.elements.sendBtn.addEventListener("click",function(e){
+//     e.preventDefault();
+// validateCheckBox();
+// })
 
-document.forms.order.elements.sendBtn.addEventListener("click",function(e){
-    e.preventDefault();
-validateCheckBox();
-})
