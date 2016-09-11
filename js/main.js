@@ -58,18 +58,37 @@ function renderCoupon(coupon){
         el.classList.add('catalog_cart--special')
         //добавить счетчик в таймер
        var timer = el.querySelectorAll('timer__item')
-       calculateTimer(coupon.dateTo)
+       var dateTo = coupon.dateTo
+       dateTo = dateTo.split(' ').join('.000');
+       dateTo = new Date(dateTo);
+       var timerValues = calculateTimer(dateTo)
+       for(var i=0;i<timer.length;i++){
+        timer[i].firstChild.innerHTML=timerValues[i]
+
+       }
 
     }
     return el
 }
 
 function calculateTimer(dateTo){
-    dateTo = dateTo.split(' ').join('.000');
-    //new Date();
-    dateTo = new Date(dateTo);
     var now = new Date();
     var timeLeft = dateTo - now;
+    if (timeLeft<=0){
+        el.classList.remove('catalog_cart--special')
+        el.classList.add('catalog_cart--disabled')
+        //clearInterval
+    } else {
+        //count time
+        var days = Math.floor(timeLeft/(1000*60*60*24))
+        var remains = timeLeft - days*(1000*60*60*24);
+        var hours = Math.floor(remains/(1000*3600));
+        remains = remains - hours*(1000*3600);
+        var minutes = Math.floor(remains/(1000*60));
+        remains = remains - minutes*(1000*60);
+        var seconds = Math.floor(remains/(1000));
+        return [days,hours,minutes,seconds]
+    }
 
 }
 
