@@ -19,54 +19,126 @@ var svgClose = `<div onclick="removeFromCart(event, this)" class="catalog_basket
 
 
 
-
+/*добавляем купоны из JSON*/
 function renderCoupon(coupon){
     var el=document.createElement('a')
     el.dataset.type=coupon.type
     el.dataset.special=coupon.special
-    el.dataset.dateFrom=coupon.dateFrom//finish dataset
-    el.className="catalog_cart"//see the html and add
-    //дописать картинки и названия и тд
+    el.dataset.dateFrom=coupon.dateFrom
+    el.dataset.dateTo=coupon.dateTo
+    el.dataset.metro=coupon.metro
+    el.dataset.price=coupon.priceNew
+
+    el.className="catalog_cart catalog__item"
+    el.innerHTML= `<div class="catalog_cart__image"><img src="img/epixx.jpg">
+                    <div class="catalog_cart__timer timer">
+                      <div class="timer__item"> <span> </span><span>day</span></div>
+                      <div class="timer__item"><span> </span><span>hour</span></div>
+                      <div class="timer__item"><span> </span><span>min</span></div>
+                      <div class="timer__item"><span> </span><span>sec</span></div>
+                    </div>
+                  </div>
+                  <div class="catalog_cart__content">
+                    <div class="catalog_cart__discount">27%</div>
+                    <p class="catalog_cart__title">27% discount on course of internet marketing</p>
+                    <div class="catalog_cart__footer">
+                      <p class="catalog_cart__price"><span class="price catalog_cart__price_old">33</span><span class="price catalog_cart__price_new">24</span></p>
+                      <div class="catalog_cart__btn">
+                        <p class="btn">to cart</p>
+                      </div>
+                    </div>
+                  </div>`
+    el.querySelector('catalog_cart__image').innerHTML='<img src='+coupon.backgroundUrl+'>'
+    el.querySelector('catalog_cart__discount').innerHTML=coupon.discount+'%'
+    el.querySelector('catalog_cart__title').innerHTML=coupon.title
+    el.querySelector('catalog_cart__price_old').innerHTML=coupon.priceOld
+    el.querySelector('catalog_cart__price_new').innerHTML=coupon.priceNew
+
     if(coupon.special){
-        el.classList.add('catalog')//correct class name
+        el.classList.add('catalog_cart--special')
+        //добавить счетчик в таймер
+       var timer = el.querySelectorAll('timer__item')
+       calculateTimer(coupon.dateTo)
+
     }
     return el
 }
 
+function calculateTimer(dateTo){
+    dateTo = dateTo.split(' ').join('.000');
+    //new Date();
+    dateTo = new Date(dateTo);
+    var now = new Date();
+    var timeLeft = dateTo - now;
+
+}
+
+
+
+
 //вставить функцию запроса в json из нашей системы
 function render(coupons){
     var list=document.querySelector('.catalog__list');
-for(var i=0;i<coupons.length;i++){
-    var coupon=renderCoupon(coupons[i]);
-    list.appendChild(coupon)
+    for(var i=0;i<coupons.length;i++){
+        var coupon=renderCoupon(coupons[i]);
+        list.appendChild(coupon)
 }
     }
 
+// function getJSON(url, onSuccess) {
+//         var request = new XMLHttpRequest();
+//         request.open('get', url, true)
+//         request.onreadystatechange =  function(){
+//                 if(request.readyState===4){
+//                 var response=JSON.parse(request.responseText);
+//                 onSuccess(response)
+//                 };
+//         };
+//         request.send();
+//         return request;
+// }
+
+
+// getJSON(location.origin + '/data.json', function(coupons) {
+//         render(coupons)
+//         addListenersToButtons();
+// })
+
+
+// // var request=new XMLHttpRequest();
+// // request.open("get","../data.json",true)
+// // request.onreadystatechange=function(){
+// //   if(request.readyState===4){
+// //   var response=JSON.parse(request.responseText);
+// //   render(response)
+// //   };
+// // };
+// // request.send()
+
+//var coupons=JSON.parse()
 
 
 
 
 
+/* добавляем купоны в корзину */
 
-
-
-/* подписаться на клики: addEventListener */
-
-
-var toCart = document.querySelectorAll('.catalog__item');
-for (var i=0; i<toCart.length; i++){
-    toCart[i].addEventListener('click',(function(i){
-        return function(e){
-        e.preventDefault();
-        if (!toCart[i].classList.contains("catalog_cart--disabled")){
-            var price = Number(toCart[i].dataset.price);
-            var element=toCart[i].querySelector(".catalog_cart__title")
-            var title = element.innerText;
-            addToCart(title,price);
-        }
+// function addListenersToButtons() {
+    var toCart = document.querySelectorAll('.catalog__item');
+    for (var i=0; i<toCart.length; i++){
+        toCart[i].addEventListener('click',(function(i){
+            return function(e){
+                e.preventDefault();
+                if (!toCart[i].classList.contains("catalog_cart--disabled")){
+                    var price = Number(toCart[i].dataset.price);
+                    var element=toCart[i].querySelector(".catalog_cart__title")
+                    var title = element.innerText;
+                    addToCart(title,price);
+                }
+            }
+        })(i))
     }
-    })(i))
-}
+// }
 
 
 function addToCart(title, price) {
@@ -104,10 +176,19 @@ function removeFromCart(e, context) {
 }
 
 
+/*изменение вида списка купонов 2-3*/
+var catalogListViewItem = document.querySelectorAll('.catalog_view__item');
+var catalogListView = document.querySelector('.catalog__list');
 
-
-
-
+catalogListViewItem[0].addEventListener('click', toggleListView(this))
+catalogListViewItem[1].addEventListener('click', toggleListView(this))
+function toggleListView(e){
+     e.preventDefault();
+    catalogListView.classList.toggle('catalog__list--three');
+    catalogListViewItem[0].classList.toggle('catalog_view__item--active');
+    catalogListView.classList.toggle('catalog__list--two');
+    catalogListViewItem[1].classList.toggle('catalog_view__item--active');
+}
 
 
 
