@@ -19,7 +19,7 @@
     "special": true,
     "metro": "pushkinskaya",
     "dateFrom": "2016-07-08T08:03:28 -03:00",
-    "dateTo": "2016-08-29T08:37:39 -03:00",
+    "dateTo": "2017-08-29T08:37:39 -03:00",
     "type": "food",
     "backgroundUrl": "img/photo-7.jpg"
   },
@@ -31,7 +31,7 @@
     "special": true,
     "metro": "admiralteiskaya",
     "dateFrom": "2016-07-03T03:20:03 -03:00",
-    "dateTo": "2016-09-17T08:48:49 -03:00",
+    "dateTo": "2017-09-17T08:48:49 -03:00",
     "type": "food",
     "backgroundUrl": "img/photo-3.jpg"
   },
@@ -55,7 +55,7 @@
     "special": true,
     "metro": "primorskaya",
     "dateFrom": "2016-07-03T05:03:37 -03:00",
-    "dateTo": "2016-07-25T06:41:52 -03:00",
+    "dateTo": "2016-11-25T06:41:52 -03:00",
     "type": "beauty",
     "backgroundUrl": "img/photo-5.jpg"
   },
@@ -91,7 +91,7 @@
     "special": true,
     "metro": "primorskaya",
     "dateFrom": "2016-07-01T11:45:08 -03:00",
-    "dateTo": "2016-07-15T02:39:41 -03:00",
+    "dateTo": "2016-10-15T02:39:41 -03:00",
     "type": "beauty",
     "backgroundUrl": "img/travel.jpg"
   },
@@ -247,7 +247,7 @@
     "special": false,
     "metro": "pushkinskaya",
     "dateFrom": "2016-07-04T11:19:58 -03:00",
-    "dateTo": "2016-09-20T04:37:16 -03:00",
+    "dateTo": "2017-09-20T04:37:16 -03:00",
     "type": "education",
     "backgroundUrl": "img/photo-3.jpg"
   },
@@ -259,7 +259,7 @@
     "special": true,
     "metro": "pushkinskaya",
     "dateFrom": "2016-07-01T12:23:42 -03:00",
-    "dateTo": "2016-10-13T04:32:59 -03:00",
+    "dateTo": "2017-10-13T04:32:59 -03:00",
     "type": "food",
     "backgroundUrl": "img/photo-4.jpg"
   },
@@ -271,7 +271,7 @@
     "special": true,
     "metro": "pushkinskaya",
     "dateFrom": "2016-07-07T04:26:13 -03:00",
-    "dateTo": "2016-08-19T09:43:50 -03:00",
+    "dateTo": "2017-08-19T09:43:50 -03:00",
     "type": "entertainment",
     "backgroundUrl": "img/photo-5.jpg"
   },
@@ -331,7 +331,7 @@
     "special": true,
     "metro": "primorskaya",
     "dateFrom": "2016-07-09T04:07:58 -03:00",
-    "dateTo": "2016-08-05T08:29:45 -03:00",
+    "dateTo": "2017-08-05T08:29:45 -03:00",
     "type": "entertainment",
     "backgroundUrl": "img/photo-1.jpg"
   },

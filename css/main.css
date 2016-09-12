@@ -737,7 +737,7 @@ a {
     width: 45%;
     text-align: right; }
   .catalog_cart__timer {
-    /*display: none;*/
+    display: none;
     position: absolute;
     width: 100%;
     bottom: 0;

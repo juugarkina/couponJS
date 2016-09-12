@@ -15,7 +15,8 @@ var svgClose = `<div onclick="removeFromCart(event, this)" class="catalog_basket
 </g>
 </svg></div>`
 
-
+var list=document.querySelector('.catalog__list');
+var couponsAll= []
 
 
 
@@ -48,7 +49,7 @@ function renderCoupon(coupon){
                       </div>
                     </div>
                   </div>`
-    el.querySelector('.catalog_cart__image').innerHTML='<img src='+coupon.backgroundUrl+'>'
+    el.querySelector('.catalog_cart__image img').src =coupon.backgroundUrl
     el.querySelector('.catalog_cart__discount').innerHTML=coupon.discount+'%'
     el.querySelector('.catalog_cart__title').innerHTML=coupon.title
     el.querySelector('.catalog_cart__price_old').innerHTML=coupon.priceOld
@@ -93,7 +94,7 @@ function renderCoupon(coupon){
 
 //вставить функцию запроса в json из нашей системы
 function render(coupons){
-    var list=document.querySelector('.catalog__list');
+
     for(var i=0;i<coupons.length;i++){
         var coupon=renderCoupon(coupons[i]);
         list.appendChild(coupon)
@@ -116,6 +117,7 @@ function getJSON(url, onSuccess) {
 
 getJSON('./data.json', function(coupons) {
         render(coupons)
+        couponsAll = document.querySelectorAll('.catalog__item');
         addListenersToButtons();
 })
 
@@ -125,14 +127,14 @@ getJSON('./data.json', function(coupons) {
 /* добавляем купоны в корзину */
 
  function addListenersToButtons() {
-    var toCart = document.querySelectorAll('.catalog__item');
-    for (var i=0; i<toCart.length; i++){
-        toCart[i].addEventListener('click',(function(i){
+
+    for (var i=0; i<couponsAll.length; i++){
+        couponsAll[i].addEventListener('click',(function(i){
             return function(e){
                 e.preventDefault();
-                if (!toCart[i].classList.contains("catalog_cart--disabled")){
-                    var price = Number(toCart[i].dataset.price);
-                    var element=toCart[i].querySelector(".catalog_cart__title")
+                if (!couponsAll[i].classList.contains("catalog_cart--disabled")){
+                    var price = Number(couponsAll[i].dataset.price);
+                    var element=couponsAll[i].querySelector(".catalog_cart__title")
                     var title = element.innerText;
                     addToCart(title,price);
                 }
@@ -195,19 +197,76 @@ catalogListViewItem[1].addEventListener('click', function(e){
 })
 
 
+/*sorting by price*/
+
+var sortBtn = document.querySelectorAll('.catalog_sort__item')
+sortBtn[0].addEventListener("click",function(e){
+    e.preventDefault()
+    var counterOut=1
+            while(counterOut!=0){
+                for(var j=0;j<couponsAll.length-1;j++){
+                    var counter=0
+                    if(couponsAll[j].dataset.price>couponsAll[j+1].dataset.price){
+                        list.insertBefore(couponsAll[j+1],couponsAll[j])
+                        var storage=couponsAll[j]
+                        couponsAll[j]=couponsAll[j+1]
+                        couponsAll[j+1]=storage
+                        counter++
+                    }
+                    counterOut=counter
+
+                }
+                couponsAll = document.querySelectorAll('.catalog__item');
+            }
+
+    // for(var i=0;i<couponsAll.length;i++){
+    //     if (couponsAll[i].classList.contains('catalog_cart--disabled')){
+    //         list.appendChild(couponsAll[i])
+    //     }else{
+
+    //     }
+
+    // }
+})
 
 
 
 
+/* open modal window*/
+var buyBtn=document.querySelector('.catalog_basket__summ .btn')
+var modalUnderlay=document.querySelector('.modal_underlay')
+var modalWindow=document.querySelector('.modal_order')
+var closeModalBtn=document.querySelector('.modal__close')
+buyBtn.addEventListener('click', function (e) {
+    e.preventDefault()
+    modalWindow.style.display="block"
+    modalUnderlay.style.display="block"
+
+})
+
+modalUnderlay.addEventListener('click',function(){
+    modalWindow.style.display="none"
+    modalUnderlay.style.display="none"
+})
 
 
+closeModalBtn.addEventListener('click',function(e){
+    e.preventDefault()
+    modalWindow.style.display="none"
+    modalUnderlay.style.display="none"
+})
 
+/*open-close filter*/
 
-
-
-
-
-
+var filters=document.querySelectorAll('.filter__title')
+var filtersContent=document.querySelectorAll('.catalog_filters__item')
+for (var i = 0; i < filters.length; i++) {
+    filters[i].addEventListener('click',(function(i){
+        return function(){
+          filtersContent[i].classList.toggle('filter--open')
+        }
+    })(i))
+}
 
 
 
