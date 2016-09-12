@@ -48,50 +48,46 @@ function renderCoupon(coupon){
                       </div>
                     </div>
                   </div>`
-    el.querySelector('catalog_cart__image').innerHTML='<img src='+coupon.backgroundUrl+'>'
-    el.querySelector('catalog_cart__discount').innerHTML=coupon.discount+'%'
-    el.querySelector('catalog_cart__title').innerHTML=coupon.title
-    el.querySelector('catalog_cart__price_old').innerHTML=coupon.priceOld
-    el.querySelector('catalog_cart__price_new').innerHTML=coupon.priceNew
+    el.querySelector('.catalog_cart__image').innerHTML='<img src='+coupon.backgroundUrl+'>'
+    el.querySelector('.catalog_cart__discount').innerHTML=coupon.discount+'%'
+    el.querySelector('.catalog_cart__title').innerHTML=coupon.title
+    el.querySelector('.catalog_cart__price_old').innerHTML=coupon.priceOld
+    el.querySelector('.catalog_cart__price_new').innerHTML=coupon.priceNew
 
     if(coupon.special){
         el.classList.add('catalog_cart--special')
+        // el.querySelector('.catalog_cart__timer').style.display="block"
         //добавить счетчик в таймер
-       var timer = el.querySelectorAll('timer__item')
+       var timer = el.querySelectorAll('.timer__item')
        var dateTo = coupon.dateTo
        dateTo = dateTo.split(' ').join('.000');
        dateTo = new Date(dateTo);
-       var timerValues = calculateTimer(dateTo)
-       for(var i=0;i<timer.length;i++){
-        timer[i].firstChild.innerHTML=timerValues[i]
+       var now = new Date();
+       var timeLeft = dateTo - now;
+        if (timeLeft<=0){
+            el.classList.remove('catalog_cart--special')
+            el.classList.add('catalog_cart--disabled')
+        //clearInterval?
+         } else {
+        //count time
+            var days = Math.floor(timeLeft/(1000*60*60*24))
+            var remains = timeLeft - days*(1000*60*60*24);
+            var hours = Math.floor(remains/(1000*3600));
+            remains = remains - hours*(1000*3600);
+            var minutes = Math.floor(remains/(1000*60));
+            remains = remains - minutes*(1000*60);
+            var seconds = Math.floor(remains/(1000));
+            var timerValuesInitial = [days,hours,minutes,seconds]
+            for(var i=0;i<timer.length;i++){
+                timer[i].firstChild.innerHTML=timerValuesInitial[i]
 
-       }
+            }
+        }
+
 
     }
     return el
 }
-
-function calculateTimer(dateTo){
-    var now = new Date();
-    var timeLeft = dateTo - now;
-    if (timeLeft<=0){
-        el.classList.remove('catalog_cart--special')
-        el.classList.add('catalog_cart--disabled')
-        //clearInterval
-    } else {
-        //count time
-        var days = Math.floor(timeLeft/(1000*60*60*24))
-        var remains = timeLeft - days*(1000*60*60*24);
-        var hours = Math.floor(remains/(1000*3600));
-        remains = remains - hours*(1000*3600);
-        var minutes = Math.floor(remains/(1000*60));
-        remains = remains - minutes*(1000*60);
-        var seconds = Math.floor(remains/(1000));
-        return [days,hours,minutes,seconds]
-    }
-
-}
-
 
 
 
@@ -104,45 +100,31 @@ function render(coupons){
 }
     }
 
-// function getJSON(url, onSuccess) {
-//         var request = new XMLHttpRequest();
-//         request.open('get', url, true)
-//         request.onreadystatechange =  function(){
-//                 if(request.readyState===4){
-//                 var response=JSON.parse(request.responseText);
-//                 onSuccess(response)
-//                 };
-//         };
-//         request.send();
-//         return request;
-// }
+function getJSON(url, onSuccess) {
+        var request = new XMLHttpRequest();
+        request.open('get', url, true)
+        request.onreadystatechange =  function(){
+                if(request.readyState===4){
+                var response=JSON.parse(request.responseText);
+                onSuccess(response)
+                };
+        };
+        request.send();
+        return request;
+}
 
 
-// getJSON(location.origin + '/data.json', function(coupons) {
-//         render(coupons)
-//         addListenersToButtons();
-// })
-
-
-// // var request=new XMLHttpRequest();
-// // request.open("get","../data.json",true)
-// // request.onreadystatechange=function(){
-// //   if(request.readyState===4){
-// //   var response=JSON.parse(request.responseText);
-// //   render(response)
-// //   };
-// // };
-// // request.send()
-
-//var coupons=JSON.parse()
-
+getJSON(location.origin + '/data.json', function(coupons) {
+        render(coupons)
+        addListenersToButtons();
+})
 
 
 
 
 /* добавляем купоны в корзину */
 
-// function addListenersToButtons() {
+ function addListenersToButtons() {
     var toCart = document.querySelectorAll('.catalog__item');
     for (var i=0; i<toCart.length; i++){
         toCart[i].addEventListener('click',(function(i){
@@ -157,7 +139,7 @@ function render(coupons){
             }
         })(i))
     }
-// }
+ }
 
 
 function addToCart(title, price) {
@@ -180,14 +162,12 @@ for(var i=0;i<cart.length; i++){
     }
 }
 document.querySelector(".catalog_basket__summ_text").innerHTML=sum
-console.log(sum)
-    /* подсчитать тотал на основе cart */
-    /* найти элемент тотала, обновить число */
+
+
 }
 
 function removeFromCart(e, context) {
     var parent = context.parentNode;
-    console.log(parent);
     var position = Number(parent.dataset.position);
     cart[position] = null;
     parent.remove();
@@ -199,15 +179,21 @@ function removeFromCart(e, context) {
 var catalogListViewItem = document.querySelectorAll('.catalog_view__item');
 var catalogListView = document.querySelector('.catalog__list');
 
-catalogListViewItem[0].addEventListener('click', toggleListView(this))
-catalogListViewItem[1].addEventListener('click', toggleListView(this))
-function toggleListView(e){
+catalogListViewItem[0].addEventListener('click', function(e){
      e.preventDefault();
-    catalogListView.classList.toggle('catalog__list--three');
-    catalogListViewItem[0].classList.toggle('catalog_view__item--active');
-    catalogListView.classList.toggle('catalog__list--two');
-    catalogListViewItem[1].classList.toggle('catalog_view__item--active');
-}
+    catalogListView.classList.remove('catalog__list--three');
+    catalogListViewItem[0].classList.add('catalog_view__item--active');
+    catalogListView.classList.add('catalog__list--two');
+    catalogListViewItem[1].classList.remove('catalog_view__item--active');
+})
+catalogListViewItem[1].addEventListener('click', function(e){
+    e.preventDefault();
+    catalogListView.classList.add('catalog__list--three');
+    catalogListViewItem[0].classList.remove('catalog_view__item--active');
+    catalogListView.classList.remove('catalog__list--two');
+    catalogListViewItem[1].classList.add('catalog_view__item--active');
+})
+
 
 
 
