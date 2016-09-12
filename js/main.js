@@ -114,7 +114,7 @@ function getJSON(url, onSuccess) {
 }
 
 
-getJSON(location.origin + '/data.json', function(coupons) {
+getJSON('./data.json', function(coupons) {
         render(coupons)
         addListenersToButtons();
 })
